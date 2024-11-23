@@ -86,20 +86,20 @@ print(zCMtot)
 IOtot = ICMf + mf * zCMf**2 + ICMt + mt * zCMt**2 + mtu * SparBuoyData["z_CM_Turbine"]**2
 print(IOtot/10**11)
 # FIXME
-M = np.array([[1., 0.],[0., 1.]])
+M = np.array([[mtot, mtot*zCMtot],[mtot*zCMtot, IOtot]])
 
-A = np.array([[1., 0.], [0., 1.]])
+A = np.array([[mtot, -rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2)], [-rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2), -rhow*np.pi/4*Dspar**2*Cm*(0.333*zbot**3)]])
 
-B = np.array([[B11, 0],[0 ,0]])
+B = np.array([[B11, 0.],[0. ,0.]])
 
 # FIXME: Water Plane Inertia
-# IAA = ...;
+IAA = (Dspar**4)*np.pi/64
 
 # FIXME: hydrodynamic stiffness
-Chst = np.array([[1., 0], [0, 1.]])
+Chst = np.array([[0., 0.], [0, -mtot*g*(0.5*zbot-zCMf)-rhow*g*IAA]])
 
 # Mooring restoring matrix
-Cmoor = np.array([[1., 0.], [0., 1.]])
+Cmoor = np.array([[Kmoor, Kmoor*zmoor], [Kmoor*zmoor, Kmoor*zmoor**2]])
 
 C = Chst + Cmoor;
 
@@ -108,10 +108,15 @@ SparBuoyData["C"] = C;
 SparBuoyData["A"] = A;
 SparBuoyData["B"] = B;
 
+print(M)
+print(A)
+print(C)
+
 ##% Natural Frequencies
 
 # FIXME: calculate C over MA
-CoMA = np.array([[1., 0.], [0., 1.]]);
+MA = np.dot(M, A)
+CoMA = np.dot(C, np.linalg.inv(MA))
 eigVal, eigVec = np.linalg.eig(CoMA)
 
 # Natural frequencies
