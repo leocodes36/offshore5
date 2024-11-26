@@ -21,7 +21,8 @@ th = SparBuoyData['Thickness']
 Dhp = Dspar
 Kmoor = SparBuoyData['K_Moor']
 zmoor = SparBuoyData['z_Moor']
-Cm = SparBuoyData['CM']
+Cm = SparBuoyData['Cm']
+CM = SparBuoyData['CM']
 Cd = SparBuoyData['CD']
 mt = SparBuoyData['M_Tower']
 zCMt = SparBuoyData['z_CM_Tower']
@@ -88,7 +89,7 @@ print(IOtot/10**11)
 # FIXME
 M = np.array([[mtot, mtot*zCMtot],[mtot*zCMtot, IOtot]])
 
-A = np.array([[mtot, -0.5*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2)], [-0.5*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2), -0.5*rhow*np.pi/4*Dspar**2*Cm*(0.333*zbot**3)]])
+A = np.array([[mtot, -1*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2)], [-1*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2), -1*rhow*np.pi/4*Dspar**2*Cm*((1/3)*zbot**3)]])
 
 B = np.array([[B11, 0.],[0. ,0.]])
 
@@ -96,7 +97,7 @@ B = np.array([[B11, 0.],[0. ,0.]])
 IAA = (Dspar**4)*np.pi/64
 
 # FIXME: hydrodynamic stiffness
-Chst = np.array([[0., 0.], [0, 1*(mtot*g*(zCB-zCMtot)+rhow*g*IAA)]])
+Chst = np.array([[0., 0.], [0, mtot*g*(zCB-zCMtot)+rhow*g*IAA]])
 # Mooring restoring matrix
 Cmoor = np.array([[Kmoor, Kmoor*zmoor], [Kmoor*zmoor, Kmoor*(zmoor**2)]])
 
@@ -114,8 +115,8 @@ print(C)
 ##% Natural Frequencies
 
 # FIXME: calculate C over MA
-MA = np.dot(M, A)
-CoMA = np.dot(C, np.linalg.inv(MA))
+MA = M + A
+CoMA = np.dot(np.linalg.inv(MA), C)
 eigVal, eigVec = np.linalg.eig(CoMA)
 
 # Natural frequencies

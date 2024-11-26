@@ -16,8 +16,8 @@ def calculateRegularWaveFrequencyInformation(waveDict):
     # Important: f and a should be 1-element arrays, otherwise
     # the function calculateKinematics will fail.
     
-    f = np.array([0.])
-    a = np.array([0.])
+    f = np.array([1/T])
+    a = np.array([H/2])
     
     # Store it inside the wind dictionary
     outputDict = dict()

@@ -23,11 +23,11 @@ constants = loadConstants()
 SparBuoyData = loadFromJSON("outputVariables/SparBuoyDataComplete.json")
 
 # FIXME set correct CD
-SparBuoyData["CD"] = 0.;
+SparBuoyData["CD"] = 0.6;
 
 z = np.linspace(SparBuoyData["z_Bot"], 0., 100)
 SparBuoyData["z"] = z
-SparBuoyData["CD"] = 0.
+#SparBuoyData["CD"] = 0.
 
 # Wave kinematics 
 waves = loadFromJSON('inputVariables/wave12.json');
@@ -68,7 +68,7 @@ response["x1"] = q[:,0]
 response["x5"] = q[:,1]
 
 fig12 = makeplots(wind, waves, SparBuoyData, response, timeInfo, 'b');
-plt.savefig(ofy("fig11.pdf"))
+plt.savefig(ofy("fig12.pdf"))
 
 print(f'Q12 Surge Standard deviation [m]: {np.std(q[:,0])}');
 print(f'Q12 Pitch Standard deviation [deg]: {np.rad2deg(np.std(q[:,1]))}')

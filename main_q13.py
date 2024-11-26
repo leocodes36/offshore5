@@ -1,6 +1,7 @@
 from functionsPy.common import *
 from functionsPy.waves import *
 from functionsPy.wind import *
+from functionsPy.regularWaves import *
 from functionsPy.integration import ode4
 from functionsPy.floaterIntegration import dqdt
 from functionsPy.plotting import makeplots
@@ -26,7 +27,7 @@ SparBuoyData["CD"] = 0.6;
 z = np.linspace(SparBuoyData["z_Bot"], 0., 100)
 SparBuoyData["z"] = z
 # Dry decay test
-SparBuoyData["CD"] = 0.
+#SparBuoyData["CD"] = 0.
 
 # Wave kinematics - should be zero
 waves = loadFromJSON('inputVariables/wave12.json');
@@ -77,7 +78,7 @@ fig13 = makeplots(wind, waves, SparBuoyData, response, timeInfo, 'g');
 
 #%% Import the results from Q12
 from main_q12 import response as response_waveonly
-fig13 = makeplots(wind, waves, SparBuoyData, response_waveonly, timeInfo, 'b', ax=fig13)
+#fig13 = makeplots(wind, waves, SparBuoyData, response_waveonly, timeInfo, 'b', ax=fig13)
 
 plt.savefig(ofy("fig13.pdf"))
 

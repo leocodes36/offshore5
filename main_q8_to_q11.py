@@ -54,7 +54,7 @@ tode = np.arange(0., timeInfo["TDur"], 2*timeInfo["dt"])
 
 # Initial conditions for surge decay
 # FIXME: correct q0
-q0 = np.array([0,0,0,0,np.nan])
+q0 = np.array([1,0,0,0,np.nan])
 q = ode4(dqdt, tode,q0, SparBuoyData, IEA22MWRotor, waves, wind)
 
 response = dict()
@@ -84,7 +84,7 @@ SparBuoyData["CD"] = 0.6
 
 # Initial conditions for surge decay
 # FIXME: correct q0
-q0 = np.array([0,0,0,0,np.nan])
+q0 = np.array([1,0,0,0,np.nan])
 q = ode4(dqdt, tode,q0, SparBuoyData, IEA22MWRotor, waves, wind)
 
 response = dict()
@@ -98,7 +98,7 @@ plt.savefig(ofy("fig11a.pdf"))
 
 # Initial conditions for pitch decay
 # FIXME: correct q0
-q0 = np.array([0,0,0,0,np.nan])
+q0 = np.array([0,0.1,0,0,np.nan])
 q = ode4(dqdt, tode,q0, SparBuoyData, IEA22MWRotor, waves, wind)
 
 response = dict()
@@ -118,7 +118,7 @@ SparBuoyData["CD"] = 0.
 
 # Initial conditions for pitch decay
 # FIXME: correct q0
-q0 = np.array([0,0,0,0,np.nan])
+q0 = np.array([0,1,0,0,np.nan])
 q_nodrag = ode4(dqdt, tode,q0, SparBuoyData, IEA22MWRotor, waves, wind)
 
 response_nodrag = dict()
@@ -128,11 +128,11 @@ response_nodrag["x5"] = q_nodrag[:,1]
 
 # Enable drag forcing
 # FIXME: CD
-SparBuoyData["CD"] = 0.
+SparBuoyData["CD"] = 0.6
 
 # Initial conditions for pitch decay
 # FIXME: correct q0
-q0 = np.array([0,0,0,0,np.nan])
+q0 = np.array([0,1,0,0,np.nan])
 q_drag = ode4(dqdt, tode,q0, SparBuoyData, IEA22MWRotor, waves, wind)
 
 response_drag = dict()
@@ -144,3 +144,5 @@ fig11c = makeplots(wind, waves, SparBuoyData, response_nodrag, timeInfo, 'b');
 fig11c = makeplots(wind, waves, SparBuoyData, response_drag, timeInfo, 'g', ax=fig11c);
 fig11c[0,0].legend(["no drag", "drag"])
 
+plt.savefig(ofy("fig11c.pdf"))
+# %%
