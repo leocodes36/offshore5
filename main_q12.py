@@ -19,10 +19,12 @@ plt.close('all')
 
 # Load the variables here
 timeInfo = loadFromJSON("inputVariables/time.json")
+timeInfo["fHighCut"] = 0.2
 constants = loadConstants()
 SparBuoyData = loadFromJSON("outputVariables/SparBuoyDataComplete.json")
 
 # FIXME set correct CD
+# FIXED
 SparBuoyData["CD"] = 0.6;
 
 z = np.linspace(SparBuoyData["z_Bot"], 0., 100)
@@ -37,6 +39,7 @@ waves.update(timeInfo)
 waves["t"] = np.arange(0.,timeInfo["TDur"] ,timeInfo["dt"])
 
 # FIXME : fix calculateRegularWaveFrequencyInformation to make this work
+# FIXED
 waves = calculateRegularWaveFrequencyInformation(waves)
 waves = calculateFreeSurfaceElevationTimeSeries(waves)
 waves = calculateKinematics(waves)
@@ -58,7 +61,8 @@ IEA22MWRotor["active"] = False
 # Integration time array
 tode = np.arange(0., timeInfo["TDur"], 2*timeInfo["dt"])
 
-# FIXME: q0 for pitch decay
+# FIXME: q0 for response
+# FIXED
 q0 = np.array([0,0,0,0,np.nan])
 q = ode4(dqdt, tode, q0, SparBuoyData, IEA22MWRotor, waves, wind)
 
@@ -68,7 +72,10 @@ response["x1"] = q[:,0]
 response["x5"] = q[:,1]
 
 fig12 = makeplots(wind, waves, SparBuoyData, response, timeInfo, 'b');
+
 plt.savefig(ofy("fig12.pdf"))
 
 print(f'Q12 Surge Standard deviation [m]: {np.std(q[:,0])}');
+print(f'Q12 Surge mean [m]: {np.mean(q[:,0])}');
 print(f'Q12 Pitch Standard deviation [deg]: {np.rad2deg(np.std(q[:,1]))}')
+print(f'Q12 Pitch mean [deg]: {np.rad2deg(np.mean(q[:,1]))}');

@@ -45,31 +45,39 @@ zbot = -draft;
 zballst = BallastCOG; # height of draft is ballast 
 
 # FIXME: Center of buoyancy
+# FIXED
 zCB = 0.5 * zbot
 
 # FIXME: Displacement volume
+# FIXED
 Vol = np.pi/4 * Dspar**2 * zbot
 
 # FIXME: Spar length
+# FIXED
 ls = draft + fb
 
 # FIXME: Spar mass without ballast
+# FIXED
 ms = SparBuoyData["M_Floater"]
 
 # Floater mass with ballast
 mf = ms + mb
 
 # FIXME: Spar center of mass without ballast
+# FIXED
 zCMs = fb - 0.5 * ls
 
 # FIXME: Floater center of mass with ballast
+# FIXED
 zCMb = draft * (-1 + 0.025)
 zCMf = (ms * zCMs + mb * zCMb)/(mf)
 
 # FIXME: Spar inertia about its Center of Mass without ballast
+# FIXED
 ICMs = SparBuoyData["I_CM_Floater"]
 
 # FIXME: Floater inertia about floater CM with ballast
+# FIXED
 ICMf = ICMs + ms * (zCMs - zCMf)**2 + mb * (zCMf - zCMb)**2
 
 
@@ -77,16 +85,20 @@ ICMf = ICMs + ms * (zCMs - zCMf)**2 + mb * (zCMf - zCMb)**2
 ##% Q6: System matrices
 
 # FIXME: Total mass
+# FIXED
 mtot = mf + mt + mtu
 print(mtot/10**7) # CHECKS OUT
 
 # FIXME: Total center of mass
+# FIXED
 zCMtot = (mf * zCMf + mt * zCMt + mtu * SparBuoyData["z_CM_Turbine"]) / mtot
 print(zCMtot)
 # FIXME: Total inertia about flotation point
+# FIXED
 IOtot = ICMf + mf * zCMf**2 + ICMt + mt * zCMt**2 + mtu * SparBuoyData["z_CM_Turbine"]**2
 print(IOtot/10**11)
 # FIXME
+# FIXED
 M = np.array([[mtot, mtot*zCMtot],[mtot*zCMtot, IOtot]])
 
 A = np.array([[mtot, -1*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2)], [-1*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2), -1*rhow*np.pi/4*Dspar**2*Cm*((1/3)*zbot**3)]])
@@ -94,9 +106,11 @@ A = np.array([[mtot, -1*rhow*np.pi/4*Dspar**2*Cm*(0.5*zbot**2)], [-1*rhow*np.pi/
 B = np.array([[B11, 0.],[0. ,0.]])
 
 # FIXME: Water Plane Inertia
+# FIXED
 IAA = (Dspar**4)*np.pi/64
 
 # FIXME: hydrodynamic stiffness
+# FIXED
 Chst = np.array([[0., 0.], [0, mtot*g*(zCB-zCMtot)+rhow*g*IAA]])
 # Mooring restoring matrix
 Cmoor = np.array([[Kmoor, Kmoor*zmoor], [Kmoor*zmoor, Kmoor*(zmoor**2)]])
@@ -115,6 +129,7 @@ print(C)
 ##% Natural Frequencies
 
 # FIXME: calculate C over MA
+# FIXED
 MA = M + A
 CoMA = np.dot(np.linalg.inv(MA), C)
 eigVal, eigVec = np.linalg.eig(CoMA)
@@ -134,10 +149,10 @@ print(f'Pitch period: {Tnat[1]:.2f} [s]')
 
 # FIXME: Added mass in heave
 # A33 = ...; 
-a33 = 0.5
+a33 = 0.5 * rhow * 0.64 * 4/3 * np.pi * (Dhp/2)**3
 
 # FIXME: Hydrostatic restoring in heave
-c33 = 1;
+c33 = rhow * g * np.pi/4 * Dhp**2
 
 # FIXME: Heave natural period
 Theave = 1;
