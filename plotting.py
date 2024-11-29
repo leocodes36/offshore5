@@ -35,12 +35,12 @@ def makeplots(wind, waves, structure, response, timeInfo, color, **kwargs):
     ax[2,1].axvline(structure["fnat"][0], color='k', linestyle='--')
 
     ax[3,0].plot(response["t"], np.rad2deg(response["x5"]), color=color)    
-    ax[3,0].set_ylabel("pitch[rad]")
+    ax[3,0].set_ylabel("pitch [deg]")
     ax[3,0].set_xlabel("Time [s]")
     
     f, _, S = freqSpectrum(response["t"][transcutr:], response["x5"][transcutr:])
     ax[3,1].plot(f, S, color=color)
-    ax[3,1].set_ylabel("PSD [rad^2 / Hz]")
+    ax[3,1].set_ylabel("PSD [deg^2 / Hz]")
     ax[3,1].set_xlabel("Frequency [Hz]")
     ax[3,1].axvline(structure["fnat"][1], color='k', linestyle='--')
         
