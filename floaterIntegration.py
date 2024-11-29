@@ -37,6 +37,7 @@ def dqdt(t, q,
     Faero = np.array([Thrust, Thrust*structure["zhub"]])
     
     # FIXME for xdot1
+    # FIXED
     x_dot_submerged = xdot1[0] + structure["z"]*xdot1[1] # See assignment question 2
     
     u, ut = waves["u"][i_,:], waves["ut"][i_,:]
@@ -47,9 +48,10 @@ def dqdt(t, q,
     output = np.zeros(5)
     output[0:2] = xdot1
     # FIXME for Equation of motion below
+    # FIXED
     F = Fhydro + Faero
     output[2:4] = np.dot((F.T - np.dot(structure["B"],xdot1.T) - np.dot(structure["C"], x1.T)), np.linalg.inv(structure["M"] + structure["A"]))
     # FIXME for control equation below
-    output[4] = 0.
+    output[4] = -rotor["gamma"] * (CT1 - CTVrel)
     
     return output

@@ -7,10 +7,12 @@ c = loadConstants()
 def F_wind(rotorDict, V_10, V_hub, x_dot=0.):
     
     # FIXME: calculate V_rel
-    V_rel = 0.;
+    # FIXED
+    V_rel = V_hub - x_dot;
     
     # FIXME: make the call to CT function dependent on V_rel
-    CTVrel = Ct(rotorDict, V_hub)
+    # FIXED
+    CTVrel = Ct(rotorDict, V_rel)
     
     # If the controller is active (gamma!=0), then CT comes from the rotor dict.
     # Otherwise, compute it on V_rel
@@ -33,6 +35,6 @@ def F_var(rotorDict, V_hub, x_dot=0., CT=0.):
     """
 
     # relative velocity (wind minus structural)
-    V_rel = V_hub-x_dot
+    V_rel = V_hub - x_dot
 
     return 0.5*c["rho_air"]*rotorDict["ARotor"]*CT*V_rel*np.abs(V_rel)    

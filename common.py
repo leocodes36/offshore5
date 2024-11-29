@@ -97,6 +97,16 @@ def pad2(vector, size):
     # Padding an array with zeros up to size
     return np.pad(vector, [1, size - len(vector) - 1]) 
 
+def update_struct(dict, timeInfo):
+    dict.update(timeInfo)
+    return dict
+
+def ensure_col_vec(arr):
+    """if arr.ndim == 1:
+        return arr.reshape(-1, 1)
+    else:
+        raise ValueError("Input array must be 1-dimensional")"""
+    return arr
 
 class Timer(object):
     """ This is just a simple timer as we don't have tic - toc in Python.

@@ -15,6 +15,7 @@ def calculateRegularWaveFrequencyInformation(waveDict):
     # also to calculate regular waves.
     # Important: f and a should be 1-element arrays, otherwise
     # the function calculateKinematics will fail.
+    # FIXED
     
     f = np.array([1/T])
     a = np.array([H/2])

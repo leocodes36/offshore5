@@ -9,36 +9,40 @@ def makeplots(wind, waves, structure, response, timeInfo, color, **kwargs):
     if not ax.any():
         _, ax = plt.subplots(4,2, sharex='col')
     
+    transcut = int(0.5 * len(wind["t"]) - 1)
+    transcutr = int(0.5 * len(response["t"]) - 1)
     
     ax[0,0].plot(wind["t"], wind["V_hub"], color=color)
     ax[0,0].set_ylabel("V[m/s]")
     
-    f, _, S = freqSpectrum(wind["t"], wind["V_hub"])
+    f, _, S = freqSpectrum(wind["t"][transcut:], wind["V_hub"][transcut:])
     ax[0,1].plot(f, S, color=color)
     ax[0,1].set_ylabel("PSD [m^2/s^2 / Hz]")
     
     ax[1,0].plot(waves["t"], waves["eta"], color=color)
     ax[1,0].set_ylabel("eta[m]")
     
-    f, _, S = freqSpectrum(waves["t"],  waves["eta"])
+    f, _, S = freqSpectrum(waves["t"][transcut:],  waves["eta"][transcut:])
     ax[1,1].plot(f, S, color=color)
     ax[1,1].set_ylabel("PSD [m^2 / Hz]")    
 
     ax[2,0].plot(response["t"], response["x1"], color=color)
     ax[2,0].set_ylabel("surge[m]")
     
-    f, _, S = freqSpectrum(response["t"], response["x1"])
+    f, _, S = freqSpectrum(response["t"][transcutr:], response["x1"][transcutr:])
     ax[2,1].plot(f, S, color=color)
     ax[2,1].set_ylabel("PSD [m^2 / Hz]")    
-    ax[2,1].axvline(structure["fnat"][0], 0., np.max(S), color='k', linestyle='--')
+    ax[2,1].axvline(structure["fnat"][0], color='k', linestyle='--')
 
     ax[3,0].plot(response["t"], np.rad2deg(response["x5"]), color=color)    
     ax[3,0].set_ylabel("pitch[rad]")
+    ax[3,0].set_xlabel("Time [s]")
     
-    f, _, S = freqSpectrum(response["t"], response["x5"])
+    f, _, S = freqSpectrum(response["t"][transcutr:], response["x5"][transcutr:])
     ax[3,1].plot(f, S, color=color)
     ax[3,1].set_ylabel("PSD [rad^2 / Hz]")
-    ax[3,1].axvline(structure["fnat"][1], 0., np.max(S), color='k', linestyle='--')
+    ax[3,1].set_xlabel("Frequency [Hz]")
+    ax[3,1].axvline(structure["fnat"][1], color='k', linestyle='--')
         
     ax[3,1].set_xlim([0., timeInfo["fHighCut"]])
     [ax_.grid(True) for ax_ in ax.ravel()]
