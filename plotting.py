@@ -38,7 +38,7 @@ def makeplots(wind, waves, structure, response, timeInfo, color, **kwargs):
     ax[3,0].set_ylabel("pitch [deg]")
     ax[3,0].set_xlabel("Time [s]")
     
-    f, _, S = freqSpectrum(response["t"][transcutr:], response["x5"][transcutr:])
+    f, _, S = freqSpectrum(response["t"][transcutr:], np.rad2deg(response["x5"][transcutr:]))
     ax[3,1].plot(f, S, color=color)
     ax[3,1].set_ylabel("PSD [deg^2 / Hz]")
     ax[3,1].set_xlabel("Frequency [Hz]")
